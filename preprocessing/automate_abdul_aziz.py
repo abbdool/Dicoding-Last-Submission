@@ -18,7 +18,7 @@ def run_preprocessing():
 
     # 3. Data Cleaning
     print("Membersihkan data...")
-    df_clean = df.drop(columns=['customer_id'], axis=1)
+    df_clean = df.drop(columns=['customer_id'])
     df_clean = df_clean.drop_duplicates()
 
     # 4. Encoding Kategorikal
