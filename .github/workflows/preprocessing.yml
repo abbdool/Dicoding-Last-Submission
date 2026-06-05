@@ -1,0 +1,39 @@
+name: Automate Preprocessing
+
+on:
+  push:
+    paths:
+      - 'churn_raw/**'
+      - 'preprocessing/automate_abdul_aziz.py'
+  workflow_dispatch: # Memungkinkan lu nge-trigger manual via tombol di GitHub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12.7' # Sesuai rekomendasi Dicoding
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas numpy scikit-learn
+
+    - name: Run preprocessing script
+      run: |
+        cd preprocessing
+        python automate_abdul_aziz.py
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add preprocessing/churn_preprocessing/churn_preprocessed.csv
+        git commit -m "Auto-update preprocessed data via GitHub Actions" || echo "Tidak ada perubahan data untuk di-commit"
+        git push
